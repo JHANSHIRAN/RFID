@@ -137,7 +137,8 @@ const Reports = () => {
   const handleExport = () => {
     const qs    = `startDate=${startDate}&endDate=${endDate}`;
     const grpQs = groupLabel ? `&groupLabel=${encodeURIComponent(groupLabel)}` : '';
-    fetch(`http://localhost:8081/api/attendance/report/export?${qs}${grpQs}`, {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8081';
+    fetch(`${API_URL}/api/attendance/report/export?${qs}${grpQs}`, {
       headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
     })
       .then(r => { if (!r.ok) throw new Error(); return r.blob(); })
