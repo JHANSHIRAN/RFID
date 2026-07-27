@@ -137,7 +137,7 @@ const Reports = () => {
   const handleExport = () => {
     const qs    = `startDate=${startDate}&endDate=${endDate}`;
     const grpQs = groupLabel ? `&groupLabel=${encodeURIComponent(groupLabel)}` : '';
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8081';
+    const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:8081' : '';
     fetch(`${API_URL}/api/attendance/report/export?${qs}${grpQs}`, {
       headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
     })
