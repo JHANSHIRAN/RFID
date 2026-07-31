@@ -1,17 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Light Pink Theme Palette */
-  --bg-primary: #FFE4E1; /* Misty Rose / Light Pink */
-  --bg-secondary: #FFC0CB; /* Pink */
-  --bg-tertiary: #FFB6C1; /* Light Pink */
+  /* Main Light Theme Palette */
+  --bg-primary: #F8FAFC; /* Slate 50 */
+  --bg-secondary: #FFFFFF; /* White */
+  --bg-tertiary: #F1F5F9; /* Slate 100 */
   
-  /* Dashboard specific background */
-  --bg-dashboard: #FFE4E1; /* Light Pink */
+  --bg-dashboard: #F8FAFC; 
   
   --text-primary: #1F2937;
   --text-secondary: #4B5563;
   --text-muted: #6B7280;
+
+  /* Sidebar Navy Blue Palette */
+  --bg-sidebar: #0F1E36;
+  --bg-sidebar-hover: #1E2E4A;
+  --text-sidebar: #F8FAFC;
+  --text-sidebar-muted: #94A3B8;
   
   --accent-primary: #3B82F6;
   --accent-primary-hover: #2563EB;

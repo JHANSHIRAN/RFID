@@ -90,6 +90,19 @@ const StaffUsers = () => {
     }
   };
 
+  const handleResetPassword = async (staffUser) => {
+    if (user?.role !== 'ADMIN' && user?.role !== 'MANAGER') return;
+    
+    if (!window.confirm(`Are you sure you want to reset the password for ${staffUser.email}?`)) return;
+    
+    try {
+      await api.post(`/api/users/${staffUser.id}/reset-password`);
+      alert(`Password reset successfully for ${staffUser.email}. Their new password is their email address.`);
+    } catch (err) {
+      alert(err.message || 'Failed to reset password');
+    }
+  };
+
   const columns = [
     { header: 'ID', accessor: 'id' },
     { 
@@ -135,10 +148,18 @@ const StaffUsers = () => {
               {row.active ? 'Deactivate' : 'Reactivate'}
             </button>
             
+            <button 
+              className="btn btn-secondary" 
+              style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+              onClick={() => handleResetPassword(row)}
+            >
+              Reset Password
+            </button>
+            
             {row.active && (
               <button 
                 className="btn" 
-                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', backgroundColor: 'var(--danger-bg)', color: 'var(--danger-color)', border: '1px solid var(--danger-color)' }}
+                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', backgroundColor: 'var(--danger-bg)', color: 'var(--danger)', border: '1px solid var(--danger)' }}
                 onClick={() => handleDelete(row)}
                 disabled={row.id === user.id}
               >

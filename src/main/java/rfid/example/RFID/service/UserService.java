@@ -137,6 +137,28 @@ public class UserService {
         return "Password changed successfully!";
     }
 
+    public String resetPassword(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Error: Staff user not found!"));
+
+        User currentUser = getCurrentAuthenticatedUser();
+        if (currentUser == null || (currentUser.getRole() != Role.ADMIN && currentUser.getRole() != Role.MANAGER)) {
+            throw new RuntimeException("Error: Only Administrators and Managers can reset passwords.");
+        }
+        if (currentUser.getRole() == Role.MANAGER && user.getRole() != Role.OPERATOR) {
+            throw new RuntimeException("Error: Managers can only reset Operator passwords.");
+        }
+
+        String rawPassword = user.getEmail();
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setPasswordChangeRequired(true);
+        userRepository.save(user);
+
+        auditLogService.log("PASSWORD_RESET", "USER", user.getId().toString(), null);
+
+        return "Password reset successfully!";
+    }
+
     public List<User> getAllStaffUsers() {
         return userRepository.findAll();
     }

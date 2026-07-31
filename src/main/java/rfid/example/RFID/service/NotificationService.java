@@ -48,13 +48,26 @@ public class NotificationService {
         }
     }
 
-    public void sendPasswordResetNotification(String email) {
+    public void sendPasswordResetNotification(String email, String tempPassword) {
         logger.info("====================================================================");
         logger.info("EMAIL NOTIFICATION: Password Reset Required");
         logger.info("Recipient: {}", email);
         logger.info("Subject: Reset Your AccessTrack Password");
-        logger.info("Body: A password reset has been triggered for your account. Please log in and update your password.");
+        logger.info("Body: A password reset has been triggered for your account. Your new temporary password is: {}", tempPassword);
         logger.info("====================================================================");
+        
+        try {
+            if (mailSender != null) {
+                org.springframework.mail.SimpleMailMessage message = new org.springframework.mail.SimpleMailMessage();
+                message.setTo(email);
+                message.setSubject("Reset Your AccessTrack Password");
+                message.setText("Hello,\n\nA password reset has been triggered for your account by an Administrator.\n\nYour new temporary password is: " + tempPassword + "\n\nYou will be required to change this password on your next login.");
+                mailSender.send(message);
+                logger.info("Successfully sent password reset real email to {}", email);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to send password reset email. Check SMTP configuration. Reason: {}", e.getMessage());
+        }
     }
 
     public void sendAccountReactivatedNotification(String email) {

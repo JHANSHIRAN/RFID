@@ -62,4 +62,11 @@ public class UserController {
         User updated = userService.updateStaffUser(id, request);
         return ApiResponse.success(updated);
     }
+
+    @PostMapping("/{id}/reset-password")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ApiResponse<Map<String, String>> resetStaffPassword(@PathVariable Long id) {
+        String msg = userService.resetPassword(id);
+        return ApiResponse.success(Map.of("message", msg));
+    }
 }

@@ -115,8 +115,7 @@ const MainLayout = () => {
     <div style={{ 
       display: 'flex', 
       minHeight: '100vh', 
-      backgroundColor: 'var(--bg-dashboard)',
-      backgroundImage: 'radial-gradient(circle at 15% 50%, rgba(244, 114, 182, 0.08), transparent 25%), radial-gradient(circle at 85% 30%, rgba(251, 113, 133, 0.08), transparent 25%)'
+      backgroundColor: 'var(--bg-dashboard)'
     }}>
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
@@ -128,7 +127,6 @@ const MainLayout = () => {
 
       {/* Sidebar */}
       <aside 
-        className="glass-panel"
         style={{ 
           position: 'fixed', 
           top: 0, 
@@ -136,24 +134,22 @@ const MainLayout = () => {
           left: 0, 
           width: '250px', 
           zIndex: 50, 
-          backgroundColor: 'rgba(255, 255, 255, 0.65)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
+          backgroundColor: 'var(--bg-sidebar)',
+          color: 'var(--text-sidebar)',
           transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.3s ease',
           display: 'flex',
           flexDirection: 'column',
-          borderRight: '1px solid var(--border-color)',
-          borderRadius: 0,
+          borderRight: 'none',
           /* Desktop behavior */
           ...(window.innerWidth > 768 ? { transform: 'none', position: 'sticky', height: '100vh' } : {})
         }}
       >
-        <div style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--border-light)' }}>
-          <h2 style={{ fontSize: '1.25rem', margin: 0, background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            AccessTrack
+        <div style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h2 style={{ fontSize: '1.25rem', margin: 0, fontWeight: '700', letterSpacing: '1px' }}>
+            ZENCUBE
           </h2>
-          <button className="btn btn-secondary" style={{ padding: '0.25rem', border: 'none', background: 'transparent' }} onClick={() => setSidebarOpen(false)}>
+          <button className="btn btn-secondary" style={{ padding: '0.25rem', border: 'none', background: 'transparent', color: 'var(--text-sidebar)' }} onClick={() => setSidebarOpen(false)}>
             <X size={20} className="d-md-none" style={{ display: window.innerWidth > 768 ? 'none' : 'block' }} />
           </button>
         </div>
@@ -165,41 +161,34 @@ const MainLayout = () => {
             <NavLink
               key={item.path}
               to={item.path}
-              className={({ isActive }) => `btn ${isActive ? 'btn-primary' : 'btn-secondary'}`}
+              className={({ isActive }) => `btn ${isActive ? 'active' : ''}`}
               style={({ isActive }) => ({
                 justifyContent: 'flex-start', 
                 padding: '0.75rem 1rem',
-                backgroundColor: isActive ? '' : 'transparent',
-                border: isActive ? '' : 'none',
-                boxShadow: isActive ? '' : 'none',
+                backgroundColor: isActive ? 'var(--bg-sidebar-active, rgba(255,255,255,0.1))' : 'transparent',
+                color: 'var(--text-sidebar)',
+                border: 'none',
+                boxShadow: 'none',
+                borderRadius: '0',
+                borderLeft: isActive ? '4px solid var(--accent-primary)' : '4px solid transparent'
               })}
               onClick={() => { if(window.innerWidth <= 768) setSidebarOpen(false); }}
             >
-              {item.icon} {item.label}
+              {({ isActive }) => (
+                <span style={{ display: 'flex', alignItems: 'center', color: isActive ? 'var(--text-sidebar)' : 'var(--text-sidebar-muted)' }}>
+                  {item.icon} <span style={{ marginLeft: '1rem', fontWeight: isActive ? '600' : '500' }}>{item.label}</span>
+                </span>
+              )}
             </NavLink>
           ))}
         </div>
 
 
-        <div style={{ padding: '1rem', borderTop: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+        <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
           <div style={{ padding: '0.5rem 1rem', marginBottom: '0.5rem', overflow: 'hidden' }}>
-            <div style={{ fontSize: '0.875rem', fontWeight: 600, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{user?.email}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Role: {user?.role}</div>
+            <div style={{ fontSize: '0.875rem', fontWeight: 600, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', color: 'var(--text-sidebar)' }}>{user?.email}</div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-sidebar-muted)' }}>Role: {user?.role}</div>
           </div>
-          
-          <NavLink 
-            to="/change-password" 
-            className="btn btn-secondary" 
-            style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', background: 'transparent', border: 'none', boxShadow: 'none' }}
-            onClick={() => { if(window.innerWidth <= 768) setSidebarOpen(false); }}
-          >
-            <KeyRound size={16} /> <span style={{ marginLeft: '0.5rem' }}>Change Password</span>
-          </NavLink>
-          
-          <button className="btn btn-secondary" style={{ justifyContent: 'flex-start', padding: '0.75rem 1rem', background: 'transparent', border: 'none', boxShadow: 'none' }} onClick={logout}>
-            <LogOut size={16} style={{ color: 'var(--danger)' }} /> 
-            <span style={{ marginLeft: '0.5rem', color: 'var(--danger)' }}>Log out</span>
-          </button>
         </div>
       </aside>
 
@@ -207,14 +196,13 @@ const MainLayout = () => {
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         {/* Header */}
         <header 
-          className="glass-panel" 
           style={{ 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'space-between',
             padding: '1rem 2rem',
+            backgroundColor: 'var(--bg-secondary)',
             borderBottom: '1px solid var(--border-color)',
-            borderRadius: 0,
             position: 'sticky',
             top: 0,
             zIndex: 30
@@ -337,6 +325,27 @@ const MainLayout = () => {
                 </button>
               </div>
             )}
+            
+            {/* User Account Actions */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', borderLeft: '1px solid var(--border-color)', paddingLeft: '0.75rem', marginLeft: '0.25rem' }}>
+              <NavLink 
+                to="/change-password" 
+                className="btn btn-secondary" 
+                style={{ padding: '0.5rem', border: 'none', background: 'transparent', color: 'var(--text-muted)' }}
+                title="Change Password"
+              >
+                <KeyRound size={20} />
+              </NavLink>
+              
+              <button 
+                className="btn btn-secondary" 
+                style={{ padding: '0.5rem', border: 'none', background: 'transparent', color: 'var(--danger)' }} 
+                onClick={logout}
+                title="Log out"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
 
           </div>
         </header>
